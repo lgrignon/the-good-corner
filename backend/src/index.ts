@@ -8,9 +8,9 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
-app.use(bodyParser.text({type: 'text/plain'}));
+app.use(bodyParser.text({ type: 'text/plain' }));
 
-const ads = [
+let ads = [
     {
         id: 1,
         title: "Bike to sell",
@@ -38,7 +38,7 @@ const ads = [
 ];
 
 app.get("/", (req, res) => {
-    res.send("Hello World ! " );
+    res.send("Hello World ! ");
 });
 
 app.get("/ads", (req, res) => {
@@ -48,15 +48,32 @@ app.get("/ads", (req, res) => {
 
 app.post("/ads", (req, res) => {
     // TODO : vérifier qu'il n'y a pas déjà une annonce qui a le même nom
-    // TODO : générer automatiquement l'ID 
+    // générer automatiquement l'ID
+    if (!req.body.id) {
+        const max = ads.reduce((previous: number, current) => {
+            return Math.max(previous, current.id)
+        }, 0);
+        req.body.id = max + 1;
+    }
+
     // TODO : vérifier que toutes les propriétés requises sont bien renseignées
     ads.push(req.body);
     res.send(ads);
 });
 
-app.post("/dump", (req, res) => {
-    console.log(req.body);
-    res.send("okk");
+app.delete('/ads', (req, res) => {
+    ads = ads.filter(ad => ad.id != req.body.id)
+    res.send('ok');
+});
+
+app.put('/ads', (req, res) => {
+    const index = ads.findIndex(ad => ad.id == req.body.id)
+    if (index >= 0) {
+        ads[index] = req.body;
+    }
+
+    console.log("coucou", req.body)
+    res.send('ok');
 });
 
 app.listen(port, () => {
