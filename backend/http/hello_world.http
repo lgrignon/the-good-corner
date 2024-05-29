@@ -16,21 +16,43 @@ GET http://localhost:3000/ads?location=Bordeaux
 GET http://localhost:3000/ads/average?location=Montreuil sous bois
 
 
-###
-
+### Create an ad with a category
+   
 POST http://localhost:3000/ads
+Content-Type: application/json
+ 
+{
+    "title": "Gourde",
+    "description": "Grande contenance",
+    "owner": "onsenfiche@gmail.com",
+    "price": 90,
+    "location": "Montreuil",
+    "createdAt": "2024-05-29T17:14:15.922Z",
+    "category": {
+        "name": "autre2"
+    }
+}
+
+### get ads for categories
+
+POST http://localhost:3000/ads/forCategory
 Content-Type: application/json
 
 {
-    "id": 3,
-    "title": "Rollers",
-    "description": "They are super",
-    "owner": "roller.seller@gmail.com",
-    "price": 10,
-    "picture": "https://www.automobile-magazine.fr/asset/cms/34973/config/28294/apres-plusieurs-prototypes-la-bollore-bluecar-a-fini-par-devoiler-sa-version-definitive.jpg",
-    "location": "Montreuil",
-    "createdAt": "2024-05-28T10:14:15.922Z"
+    "categoryNames": ["vêtement", "autre"]
 }
+
+### forCategoryStartingByV
+
+POST http://localhost:3000/ads/forCategoryStartingByV
+Content-Type: application/json
+
+{
+}
+
+### get average ads price for autre
+
+GET http://localhost:3000/ads/averageForAutre
 
 ###
 

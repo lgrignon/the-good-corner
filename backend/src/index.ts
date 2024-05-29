@@ -87,6 +87,80 @@ app.get("/ads", (req, res) => {
     });
 });
 
+app.post("/ads/forCategory", (req, res) => {
+    const categoryNames = req.body.categoryNames as string[] | undefined;
+
+    if (!categoryNames || categoryNames.length == 0) {
+        return res.status(400).send('no categories');
+    }
+
+    const sql = `
+    select a.* 
+        from ad a 
+        join category c 
+            on a.category_id = c.id 
+        where c.name in ( ${categoryNames.map(name => `'${name}'`).join(', ')} ) 
+    `
+    console.log('get ads for category - sql=' + sql);
+
+    db.all(sql, (error: Error | null, rows) => {
+        if (error) {
+            console.error('an error occurred in get for category', error);
+            return res.status(500).send('unexpected error');
+        }
+
+        // const rows: Ad[] = rowsUnknown as Ad[];
+        console.log('ici sont les rows pour les catégories ' + categoryNames.join(','), rows);
+        res.send(rows);
+        //res.send('wait for it')
+    });
+})
+
+app.post("/ads/forCategoryStartingByV", (req, res) => {
+    const sql = `
+    select a.* 
+        from ad a 
+        join category c 
+            on a.category_id = c.id 
+        where c.name like 'v%' 
+    `
+    console.log('forCategoryStartingByV - sql=' + sql);
+
+    db.all(sql, (error: Error | null, rows) => {
+        if (error) {
+            console.error('an error occurred in get for category', error);
+            return res.status(500).send('unexpected error');
+        }
+        res.send(rows);
+    });
+})
+
+
+
+
+app.get("/ads/averageForAutre", (req, res) => {
+    const sql = `
+    select AVG(a.price) as average 
+        from ad a 
+        join category c 
+            on a.category_id = c.id 
+        where c.name = 'autre' 
+    `
+    console.log('get avg ads price for category - sql=' + sql);
+
+    db.get(sql, (error: Error | null, rowUntyped: unknown) => {
+        if (error) {
+            console.error('an error occurred in get for category', error);
+            return res.status(500).send('unexpected error');
+        }
+
+        const { average } = rowUntyped as { average: number };
+
+        console.log('average ads price for category autre: ' + average);
+
+        res.contentType('text/plain').status(200).send(average.toString());
+    });
+})
 
 
 app.get("/ads/average", (req, res) => {
@@ -112,6 +186,13 @@ app.get("/ads/average", (req, res) => {
     });
 });
 
+function getInsertAdSql(body: any, categoryId: string) {
+    return `
+            insert into ad (title, description, owner, price, location, createdAt, category_id) 
+            values ('${body.title}', '${body.description}', '${body.owner}', ${body.price}, '${body.location}', DATE('${body.createdAt}') , ${categoryId});
+            `;
+}
+
 app.post("/ads", (req, res) => {
     // TODO : vérifier qu'il n'y a pas déjà une annonce qui a le même nom
     // générer automatiquement l'ID
@@ -123,8 +204,67 @@ app.post("/ads", (req, res) => {
     }
 
     // TODO : vérifier que toutes les propriétés requises sont bien renseignées
-    ads.push(req.body);
-    res.send(ads);
+    // ads.push(req.body);
+
+    const categoryName = req.body.category.name as string;
+    db.get(`select id from category where name = '${categoryName}'`, (err: Error | null, row) => {
+        if (err) {
+            return res.status(500).send('unexpected error');
+        }
+
+        let categoryId: number | undefined;
+        if (row) {
+            categoryId = (row as any).id;
+        }
+
+        console.log("row => " + row)
+
+        if (categoryId == undefined) {
+            console.log("create ad : we need to create category " + categoryName)
+
+
+            const insertAdSql = getInsertAdSql(req.body, 'last_insert_rowid()')
+
+            const fullSql = `
+            
+            BEGIN;
+
+            INSERT INTO category (name) VALUES ('${categoryName}');
+
+            ${insertAdSql}
+
+            COMMIT;
+
+            `
+
+            console.log('insert sql with create category: ' + fullSql);
+
+            db.exec(fullSql, (err: Error | null) => {
+                if (err) {
+                    console.error('création de la catégorie', err)
+                    return res.status(500).send('unexpected error');
+                }
+
+                res.send('ok tout s\'est bien passé');
+            })
+
+
+        } else {
+            console.log("create ad : with category id " + categoryId);
+
+            const insertSql = getInsertAdSql(req.body, categoryId.toString())
+            console.log('insert sql: ' + insertSql);
+
+            db.exec(insertSql, (err: Error | null) => {
+                if (err) {
+                    return res.status(500).send('unexpected error');
+                }
+
+                res.send('ok tout s\'est bien passé');
+            })
+        }
+    })
+
 });
 
 app.delete('/ads', (req, res) => {
