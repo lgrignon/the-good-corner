@@ -6,6 +6,16 @@ GET http://localhost:3000
 GET http://localhost:3000/ads
 
 
+### Ads filtered for Bordeaux
+
+GET http://localhost:3000/ads?location=Bordeaux
+
+
+### Ads filtered for Montreuil sous bois
+
+GET http://localhost:3000/ads/average?location=Montreuil sous bois
+
+
 ###
 
 POST http://localhost:3000/ads
@@ -28,3 +38,39 @@ POST http://localhost:3000/dump
 Content-Type: text/plain
 
 boug
+
+### Delete ad by id
+
+DELETE http://localhost:3000/ads
+Content-Type: application/json
+
+{
+"id": 51
+}
+
+### Delete ad by minPrice
+
+DELETE http://localhost:3000/ads
+Content-Type: application/json
+
+{
+"minPrice": 40
+}
+
+### Update ad by id
+
+PUT http://localhost:3000/ads
+Content-Type: application/json
+ 
+{
+"id": 3,
+"title": "Supreme rollerblade",
+"description": "hey",
+"owner": "roll.er@gmail.com",
+"price": 10000.67,
+"picture": "https://www.automobile-magazine.fr/asset/cms/34973/config/28294/apres-plusieurs-prototypes-la-bollore-bluecar-a-fini-par-devoiler-sa-version-definitive.jpg",
+"location": "Mulhouse",
+"createdAt": "2024-05-05T10:14:15.922Z"
+}
+
+

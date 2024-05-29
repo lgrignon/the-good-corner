@@ -1,6 +1,24 @@
 import bodyParser from "body-parser";
 import express from "express";
 
+import sqlite from "sqlite3";
+import fs from "node:fs";
+
+const db = new sqlite.Database('./db/good_corner.sqlite');
+
+const sqlContent: string = fs.readFileSync('./db/init.sql', { encoding: 'utf-8' });
+
+console.log('init sql content : ' + sqlContent);
+
+db.exec(sqlContent, (err: Error | null) => {
+    if (err) {
+        console.log("error loading sql content : " + err);
+    } else {
+        console.log("init OK");
+    }
+});
+
+
 const message: string = "hi"
 console.log(message);
 
@@ -41,9 +59,57 @@ app.get("/", (req, res) => {
     res.send("Hello World ! ");
 });
 
+type Ad = {
+    id: number;
+    title: string;
+}
+
 app.get("/ads", (req, res) => {
     console.log('GET ads requested - ' + ads.length + ' ads returned');
-    res.send(ads);
+
+    const locationFilter = req.query['location'] as string | undefined;
+
+    let whereClause: string = "";
+    if (locationFilter) {
+        whereClause = ` where location = '${locationFilter}' `;
+    }
+
+    console.log('search ad for location: ' + locationFilter)
+
+    const sql: string = `select * from ad ${whereClause};`;
+    console.log('sql: ' + sql)
+
+    db.all(sql, (error: Error | null, rows) => {
+
+        // const rows: Ad[] = rowsUnknown as Ad[];
+        console.log('ici sont les rows', rows);
+        res.send(rows);
+    });
+});
+
+
+
+app.get("/ads/average", (req, res) => {
+    console.log('GET ads requested - ' + ads.length + ' ads returned');
+
+    const locationFilter = req.query['location'] as string | undefined;
+
+    let whereClause: string = "";
+    if (locationFilter) {
+        whereClause = ` where location = '${locationFilter}' `;
+    }
+
+    console.log('search ad for location: ' + locationFilter)
+
+    const sql: string = `select AVG(price) as moyenne from ad ${whereClause};`;
+    console.log('sql: ' + sql)
+
+    db.all(sql, (error: Error | null, rows) => {
+
+        // const rows: Ad[] = rowsUnknown as Ad[];
+        console.log('ici sont les rows', rows);
+        res.send(rows);
+    });
 });
 
 app.post("/ads", (req, res) => {
@@ -62,8 +128,39 @@ app.post("/ads", (req, res) => {
 });
 
 app.delete('/ads', (req, res) => {
-    ads = ads.filter(ad => ad.id != req.body.id)
-    res.send('ok');
+    // ads = ads.filter(ad => ad.id
+    if (req.body.id) {
+        const id = parseInt(req.body.id);
+        if (isNaN(id)) {
+            return res.status(400).send('bad id');
+        }
+
+        // id is valid, let's delete it
+        console.log("delete ad of id " + id)
+        db.run('DELETE FROM ad WHERE id = ' + id, (err: Error | null) => {
+            if (err) {
+                return res.status(500).send('unexpected error');
+            }
+
+            res.send('ok');
+        });
+    } else if (req.body.minPrice) {
+        const minPrice = parseInt(req.body.minPrice);
+        if (isNaN(minPrice)) {
+            return res.status(400).send('bad minPrice');
+        }
+
+        const sql = 'DELETE FROM ad WHERE price > ' + minPrice;
+        console.log("delete ad with sql: " + sql)
+        db.run(sql, (err: Error | null) => {
+            if (err) {
+                return res.status(500).send('unexpected error');
+            }
+
+            res.send('ok');
+        });
+    }
+
 });
 
 app.put('/ads', (req, res) => {
