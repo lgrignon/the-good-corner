@@ -2,7 +2,7 @@
 GET http://localhost:3000
 
 ###
-
+ 
 GET http://localhost:3000/ads
 
 
@@ -17,16 +17,16 @@ GET http://localhost:3000/ads/average?location=Montreuil sous bois
 
 
 ### Create an ad with a category
-   
+    
 POST http://localhost:3000/ads
 Content-Type: application/json
  
 {
-    "title": "Gourde",
+    "title": "2 Gourde",
     "description": "Grande contenance",
     "owner": "onsenfiche@gmail.com",
-    "price": 90,
-    "location": "Montreuil",
+    "price": 9,
+    "location": "Bordeaux",
     "createdAt": "2024-05-29T17:14:15.922Z",
     "category": {
         "name": "autre2"
