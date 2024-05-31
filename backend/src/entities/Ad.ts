@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "./Category";
+import { Tag } from "./Tag";
 
 @Entity()
 export class Ad {
@@ -27,6 +29,13 @@ export class Ad {
     @Column({ nullable: true })
     createdAt?: Date;
 
+    @ManyToOne(() => Category, category => category.ads, { eager: true })
+    category?: Category;
+
+    @ManyToMany(() => Tag, { cascade: true })
+    @JoinTable()
+    tags?: Promise<Tag[]>;
+
     constructor(
         title: string = '',
         description: string | undefined = undefined,
@@ -34,7 +43,7 @@ export class Ad {
         price?: number,
         picture?: string,
         location?: string,
-        createdAt?: Date
+        createdAt?: Date,
     ) {
         this.title = title;
         this.description = description;

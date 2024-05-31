@@ -67,7 +67,7 @@ DELETE http://localhost:3000/ads
 Content-Type: application/json
 
 {
-"id": 51
+"id": 18
 }
 
 ### Delete ad by minPrice

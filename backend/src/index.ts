@@ -6,6 +6,8 @@ import express from "express";
 import fs from "node:fs";
 import { Column, DataSource, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Ad } from "./entities/Ad";
+import { Category } from "./entities/Category";
+import { Tag } from "./entities/Tag";
 
 const app = express();
 const port = 3000;
@@ -19,7 +21,8 @@ const dataSource = new DataSource({
     type: 'sqlite',
     database: './db/good_corner.sqlite',
     entities: ['src/entities/*.ts'],
-    synchronize: true
+    synchronize: true,
+    logging: "all"
 });
 
 
@@ -28,12 +31,21 @@ const dataSource = new DataSource({
 app.get("/ads", async (req, res) => {
 
     const location = req.query['location'] as string | undefined;
-    const ads: Ad[] = await dataSource.manager.findBy(Ad, {
-        location
+    const ads: Ad[] = await dataSource.manager.find(Ad, {
+        relations: {
+            tags: true
+        },
+        where: {
+            location
+        }
     });
 
     console.log('got ads', ads);
 
+    for (const ad of ads) {
+        const tags: Tag[] = await ad.tags!;
+        console.log('got ad[0].tags', tags);
+    }
 
     // console.log('GET ads requested - ' + ads.length + ' ads returned');
 
@@ -257,41 +269,10 @@ app.post("/ads", async (req, res) => {
 
 // });
 
-// app.delete('/ads', (req, res) => {
-//     // ads = ads.filter(ad => ad.id
-//     if (req.body.id) {
-//         const id = parseInt(req.body.id);
-//         if (isNaN(id)) {
-//             return res.status(400).send('bad id');
-//         }
-
-//         // id is valid, let's delete it
-//         console.log("delete ad of id " + id)
-//         db.run('DELETE FROM ad WHERE id = ' + id, (err: Error | null) => {
-//             if (err) {
-//                 return res.status(500).send('unexpected error');
-//             }
-
-//             res.send('ok');
-//         });
-//     } else if (req.body.minPrice) {
-//         const minPrice = parseInt(req.body.minPrice);
-//         if (isNaN(minPrice)) {
-//             return res.status(400).send('bad minPrice');
-//         }
-
-//         const sql = 'DELETE FROM ad WHERE price > ' + minPrice;
-//         console.log("delete ad with sql: " + sql)
-//         db.run(sql, (err: Error | null) => {
-//             if (err) {
-//                 return res.status(500).send('unexpected error');
-//             }
-
-//             res.send('ok');
-//         });
-//     }
-
-// });
+app.delete('/ads', async (req, res) => {
+    const id: number = req.body.id;
+    await dataSource.manager.delete(Ad, { id });
+});
 
 // app.put('/ads', (req, res) => {
 //     const index = ads.findIndex(ad => ad.id == req.body.id)
@@ -304,7 +285,32 @@ app.post("/ads", async (req, res) => {
 // });
 
 async function cleanDB() {
-    dataSource.manager.clear(Ad);
+    await dataSource.manager.clear(Ad);
+    await dataSource.manager.clear(Category);
+    await dataSource.manager.clear(Tag);
+}
+
+async function createAndPersistAd(title: string, owner: string, category: Category, ...tags: Tag[]) {
+    const ad = new Ad(title, undefined, owner);
+    ad.category = category;
+    ad.tags = Promise.resolve(tags);
+    await dataSource.manager.save(ad);
+}
+
+async function initData() {
+
+    const tag = new Tag('Vieux matériel');
+    const tag2 = new Tag('Bonne affaire');
+    const tag3 = new Tag('0 carbone');
+
+    const category = new Category("Meubles")
+    await dataSource.manager.save(category);
+
+    const category2 = new Category("Autres")
+
+    await createAndPersistAd("armoire normande", "louis", category, tag, tag3);
+    await createAndPersistAd("roller", "mireille", category, tag2);
+    await createAndPersistAd("table de jardin", "benoit", category, tag3);
 }
 
 app.listen(port, async () => {
@@ -312,6 +318,7 @@ app.listen(port, async () => {
     await dataSource.initialize();
 
     await cleanDB();
+    await initData();
 
     console.log(`Example app listening on port ${port}`);
 });
