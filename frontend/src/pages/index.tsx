@@ -3,14 +3,15 @@ import styles from "@/styles/Home.module.css";
 import { Header } from "@/components/Header";
 import { RecentAds } from "@/components/RecentAds";
 
+// import * as X from "@/components/RecentAds";
+// X.RecentAds
+// import AdDetails from "./ads/[id]";
+
 export default function Home() {
   return (
     <>
-        <Header />
-        <main className="main-content">
-          <h2>Annonces récentes</h2>
-          <RecentAds />
-        </main>
+      <h2>Annonces récentes</h2>
+      <RecentAds />
     </>
   );
 }
