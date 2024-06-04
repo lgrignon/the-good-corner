@@ -3,7 +3,7 @@ import styles from './AdCard.module.css';
 export interface AdCardProps {
     title: string;
     url: string;
-    price?: number;
+    price: number;
     imageUrl: string;
 }
 
