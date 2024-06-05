@@ -1,42 +1,38 @@
 import { useEffect, useState } from "react";
 import { AdCard, AdCardProps } from "./AdCard";
+import axios from "axios";
 
-const ads: AdCardProps[] = [
-    {
-        title: 'Table', price: 120, url: "/ads/table", imageUrl: "/images/table.webp"
-    },
-    {
-        title: 'Dame-jeanne', price: 75, url: "/ads/dame-jeanne", imageUrl: "/images/dame-jeanne.webp"
-    },
-    {
-        title: 'Vide-poche', price: 4, url: "/ads/vide-poche", imageUrl: "/images/vide-poche.webp"
-    }
-    ,
-    {
-        title: 'Vaisselier', price: 900, url: "/ads/vaisselier", imageUrl: "/images/vaisselier.webp"
-    }
-    ,
-    {
-        title: 'Bougie', price: 8, url: "/ads/bougie", imageUrl: "/images/bougie.webp"
-    }
-    ,
-    {
-        title: 'Porte-magazine', price: 45, url: "/ads/porte-magazine", imageUrl: "/images/porte-magazine.webp"
-    }
+const BACKEND_URL = 'http://localhost:4000';
 
-];
+async function fetchAds(): Promise<AdCardProps[]> {
+    try {
+        // TODO : how to handle ad.url prop
+        const { data } = await axios.get<AdCardProps[]>(BACKEND_URL + '/ads');
+        return data;
+    } catch (e) {
+        console.error(e, 'cannot fetch ads - falling back to empty array');
+        return [];
+    }
+}
 
 export function RecentAds() {
 
     const [totalPrice, setTotalPrice] = useState<number>();
+    const [ads, setAds] = useState<AdCardProps[]>([]);
+
+    async function initAds() {
+        const ads: AdCardProps[] = await fetchAds();
+        setAds(ads);
+    }
 
     useEffect(() => {
         console.log('initialisation du totalPrice à 0');
+        initAds();
         setTotalPrice(0);
     }, []);
 
     function addPrice(price: number): void {
-        
+
         setTotalPrice(totalPrice! + price);
     }
 

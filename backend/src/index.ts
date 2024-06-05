@@ -4,14 +4,18 @@ import "reflect-metadata";
 import bodyParser from "body-parser";
 import express from "express";
 import fs from "node:fs";
+
+import cors from "cors";
+
 import { Column, DataSource, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Ad } from "./entities/Ad";
 import { Category } from "./entities/Category";
 import { Tag } from "./entities/Tag";
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.text({ type: 'text/plain' }));
 
