@@ -6,9 +6,8 @@ const BACKEND_URL = 'http://localhost:4000';
 
 async function fetchAds(): Promise<AdCardProps[]> {
     try {
-        // TODO : how to handle ad.url prop
         const { data } = await axios.get<AdCardProps[]>(BACKEND_URL + '/ads');
-        return data;
+        return data.sort((adLeft: AdCardProps, adRight: AdCardProps) => adLeft.title < adRight.title ? -1 : 1);
     } catch (e) {
         console.error(e, 'cannot fetch ads - falling back to empty array');
         return [];

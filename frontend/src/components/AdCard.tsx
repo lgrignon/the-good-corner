@@ -3,18 +3,21 @@ import styles from './AdCard.module.css';
 export interface AdCardProps {
     id: number;
     title: string;
-    description: string;
-    url: string;
+    description?: string;
     price: number;
-    picture: string;
+    picture?: string;
 }
 
-export function AdCard({ title, url, price = 0, picture }: AdCardProps) {
+export function AdCard({ id, description, title, price = 0, picture }: AdCardProps) {
     return <div className={styles.container}>
-        <a className={styles["ad-card-link"]} href={url}>
-            <img className={styles["ad-card-image"]} src={picture} />
+        <a className={styles["ad-card-link"]} href={`/ads/${id}`}>
+            <img className={styles["ad-card-image"]} src={picture ?? '/images/file-question.svg'} />
             <div className={styles["ad-card-text"]} >
-                <div className={styles["ad-card-title"]}>{title}</div>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                    <div className={styles["ad-card-title"]}>{title}</div>
+                    {description && <div>{description.toUpperCase()}</div>}
+                </div>
+
                 <div className={styles["ad-card-price"]}>{price} €</div>
             </div>
         </a>

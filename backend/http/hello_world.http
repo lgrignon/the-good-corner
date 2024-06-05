@@ -1,24 +1,24 @@
 
-GET http://localhost:3000
+GET http://localhost:4000
 
 ###
  
-GET http://localhost:3000/ads
+GET http://localhost:4000/ads
 
 
 ### Ads filtered for Bordeaux
 
-GET http://localhost:3000/ads?location=Bordeaux
+GET http://localhost:4000/ads?location=Bordeaux
 
 
 ### Ads filtered for Montreuil sous bois
 
-GET http://localhost:3000/ads/average?location=Montreuil sous bois
+GET http://localhost:4000/ads/average?location=Montreuil sous bois
 
 
 ### Create an ad with a category
     
-POST http://localhost:3000/ads
+POST http://localhost:4000/ads
 Content-Type: application/json
  
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 
 ### get ads for categories
 
-POST http://localhost:3000/ads/forCategory
+POST http://localhost:4000/ads/forCategory
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
 
 ### forCategoryStartingByV
 
-POST http://localhost:3000/ads/forCategoryStartingByV
+POST http://localhost:4000/ads/forCategoryStartingByV
 Content-Type: application/json
 
 {
@@ -52,18 +52,18 @@ Content-Type: application/json
 
 ### get average ads price for autre
 
-GET http://localhost:3000/ads/averageForAutre
+GET http://localhost:4000/ads/averageForAutre
 
 ###
 
-POST http://localhost:3000/dump
+POST http://localhost:4000/dump
 Content-Type: text/plain
 
 boug
 
 ### Delete ad by id
 
-DELETE http://localhost:3000/ads
+DELETE http://localhost:4000/ads
 Content-Type: application/json
 
 {
@@ -72,7 +72,7 @@ Content-Type: application/json
 
 ### Delete ad by minPrice
 
-DELETE http://localhost:3000/ads
+DELETE http://localhost:4000/ads
 Content-Type: application/json
 
 {
@@ -81,7 +81,7 @@ Content-Type: application/json
 
 ### Update ad by id
 
-PUT http://localhost:3000/ads
+PUT http://localhost:4000/ads
 Content-Type: application/json
  
 {
