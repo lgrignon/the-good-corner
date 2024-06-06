@@ -1,15 +1,25 @@
 import { BACKEND_URL } from "@/constants";
+import { CreateAdData, adService } from "@/services/AdService";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 interface AdCategory {
     id: number;
     name: string;
 }
 
+export interface CreateAdFormData {
+    title: string;
+    price?: number;
+    description?: string;
+}
+
 export default function CreateAdPage() {
 
     const [categories, setCategories] = useState<AdCategory[]>([]);
+
+    const { register, handleSubmit } = useForm<CreateAdFormData>();
 
     async function fetchCategories() {
         const { data } = await axios.get<AdCategory[]>(BACKEND_URL + '/categories');
@@ -21,7 +31,7 @@ export default function CreateAdPage() {
         fetchCategories();
     }, []);
 
-    function createAd(event: React.SyntheticEvent) {
+    function onFormSubmitted(event: React.SyntheticEvent) {
         event.preventDefault();
         console.log("événement submit reçu", event);
 
@@ -34,20 +44,30 @@ export default function CreateAdPage() {
 
         console.log(formValuesObject)
 
+        const createData: CreateAdData = {
+            title: formValuesObject.title as string,
+            price: parseInt(formValuesObject.price as string),
+            owner: 'Louis',
+            description: formValuesObject.description as string,
+            location: 'Montreuil',
+            picture: undefined
+        };
+
+        adService.createAd(createData);
     }
 
     return <>
         <h1>Créer une annonce</h1>
 
-        <form onSubmit={createAd}>
+        <form onSubmit={onFormSubmitted}>
 
-            <input type="text" name="title" placeholder="Saisissez un titre pour l'annonce..." />
+            <input type="text" {...register('title', { required: true })} placeholder="Saisissez un titre pour l'annonce..." />
 
             <br />Prix :
-            <input type="number" name="price" min="1" max="10000" />
+            <input type="number" {...register('price', { valueAsNumber: true, min: 1, max: 10000 })}  />
 
             <br />Description :
-            <textarea name="description">
+            <textarea {...register('description')}>
             </textarea>
 
             <br />Catégorie :

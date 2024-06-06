@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Category } from "./Category";
 import { Tag } from "./Tag";
 
@@ -52,5 +52,13 @@ export class Ad {
         this.picture = picture;
         this.location = location;
         this.createdAt = createdAt;
+    }
+
+    @BeforeInsert()
+    onBeforeInsert() {
+        console.log("before insert ad - " + this.title)
+        if (!this.createdAt) {
+            this.createdAt = new Date();
+        }
     }
 }
