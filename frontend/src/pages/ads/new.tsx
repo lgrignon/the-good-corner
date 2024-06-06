@@ -31,26 +31,17 @@ export default function CreateAdPage() {
         fetchCategories();
     }, []);
 
-    function onFormSubmitted(event: React.SyntheticEvent) {
-        event.preventDefault();
-        console.log("événement submit reçu", event);
-
-        const form: HTMLFormElement = event.target as HTMLFormElement;
-        const formData = new FormData(form);
-
-        console.log(formData)
-
-        const formValuesObject = Object.fromEntries(formData.entries());
-
-        console.log(formValuesObject)
+    function onFormSubmitted(formData: CreateAdFormData) {
+        console.log('on form submitted', formData);
 
         const createData: CreateAdData = {
-            title: formValuesObject.title as string,
-            price: parseInt(formValuesObject.price as string),
+            ...formData,
             owner: 'Louis',
-            description: formValuesObject.description as string,
             location: 'Montreuil',
-            picture: undefined
+            picture: undefined,
+            category: {
+                name: 'Objets qui allument'
+            }
         };
 
         adService.createAd(createData);
@@ -59,7 +50,7 @@ export default function CreateAdPage() {
     return <>
         <h1>Créer une annonce</h1>
 
-        <form onSubmit={onFormSubmitted}>
+        <form onSubmit={handleSubmit(onFormSubmitted)}>
 
             <input type="text" {...register('title', { required: true })} placeholder="Saisissez un titre pour l'annonce..." />
 

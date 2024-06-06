@@ -7,7 +7,7 @@ import fs from "node:fs";
 
 import cors from "cors";
 
-import { Column, DataSource, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DataSource, Entity, EntityManager, PrimaryGeneratedColumn } from "typeorm";
 import { Ad } from "./entities/Ad";
 import { Category } from "./entities/Category";
 import { Tag } from "./entities/Tag";
@@ -188,20 +188,46 @@ app.get("/categories", async (req, res) => {
 app.post("/ads", async (req, res) => {
     console.log("create ad")
 
-    try {
-        const ad = new Ad(req.body.title, req.body.description,
-            req.body.owner, req.body.price, req.body.picture,
-            req.body.location, req.body.createdAt);
+    dataSource.transaction(async (entityManager: EntityManager) => {
 
-        console.log("will save ", ad)
-        await dataSource.manager.save(ad);
-        console.log("saved ", ad)
-        res.send('au top');
+        let category: Category | null = null;
+        if (req.body.category) {
+            if (req.body.category.id) {
+                category = await entityManager.findOneBy(Category, {
+                    id: req.body.category.id
+                });
+            }
 
-    } catch (e) {
-        console.error('create ad failed', e);
-        res.status(500).send('unexpected error')
-    }
+            if (category == null && req.body.category.name) {
+                category = new Category(req.body.category.name);
+                await entityManager.save(category);
+            }
+        }
+
+        try {
+            const ad = new Ad(req.body.title, req.body.description,
+                req.body.owner, req.body.price, req.body.picture,
+                req.body.location, req.body.createdAt);
+
+            console.log("will save ", ad)
+            
+            if (category) {
+                ad.category = category;
+            }
+            
+            await entityManager.save(ad);
+
+            
+
+            console.log("saved ", ad)
+            res.send('au top');
+
+        } catch (e) {
+            console.error('create ad failed', e);
+            res.status(500).send('unexpected error')
+        }
+
+    })
 })
 
 // app.post("/ads", (req, res) => {
@@ -317,7 +343,7 @@ async function initData() {
 
     const category3 = new Category("Bolides")
     await dataSource.manager.save(category3);
-    
+
     const category2 = new Category("Autres")
     await dataSource.manager.save(category2);
 

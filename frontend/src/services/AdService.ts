@@ -8,6 +8,11 @@ export interface CreateAdData {
     description?: string;
     picture?: string;
     location?: string;
+
+    category?: {
+        id?: number;
+        name?: string;
+    }
 }
 
 export class AdService {
