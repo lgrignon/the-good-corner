@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { AdCard, AdCardProps } from "./AdCard";
 import axios from "axios";
-
-const BACKEND_URL = 'http://localhost:4000';
+import { BACKEND_URL } from "@/constants";
 
 async function fetchAds(): Promise<AdCardProps[]> {
     try {

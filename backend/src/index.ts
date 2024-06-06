@@ -74,6 +74,11 @@ app.get("/ads", async (req, res) => {
     res.send(ads);
 });
 
+app.get("/categories", async (req, res) => {
+    const categories: Category[] = await dataSource.manager.find(Category);
+    res.send(categories);
+});
+
 // app.post("/ads/forCategory", (req, res) => {
 //     const categoryNames = req.body.categoryNames as string[] | undefined;
 
@@ -310,7 +315,11 @@ async function initData() {
     const category = new Category("Meubles")
     await dataSource.manager.save(category);
 
+    const category3 = new Category("Bolides")
+    await dataSource.manager.save(category3);
+    
     const category2 = new Category("Autres")
+    await dataSource.manager.save(category2);
 
     await createAndPersistAd("Armoire normande", "très beau meuble d'époque", "Louis", 300, undefined, category, tag, tag3);
     await createAndPersistAd("Roller", undefined, "Mireille", 222, undefined, category, tag2);

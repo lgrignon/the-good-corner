@@ -5,6 +5,10 @@ GET http://localhost:4000
  
 GET http://localhost:4000/ads
 
+### Test get categories
+ 
+GET http://localhost:4000/categories
+
 
 ### Ads filtered for Bordeaux
 
