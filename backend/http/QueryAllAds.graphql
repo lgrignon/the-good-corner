@@ -1,0 +1,9 @@
+query QueryAllAds { 
+    getAllAds { 
+        title 
+        createdAt 
+        category {
+            name
+        }
+    } 
+}
