@@ -11,7 +11,7 @@ const tagsDataLoader = new DataLoader((ids) => {
 });
 
 @Resolver(Ad)
-export class AdResolver {
+export class AdQueries {
 
     @FieldResolver()
     async tags(@Root() ad: Ad): Promise<(Tag | Error)[]> {

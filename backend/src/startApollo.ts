@@ -10,9 +10,11 @@ import { Category } from "./entities/Category";
 import { Tag } from "./entities/Tag";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { AdResolver } from "./graphql-resolvers/AdResolver";
+import { AdQueries } from "./graphql-resolvers/AdQueries";
 import { buildSchema } from "type-graphql";
 import { dataSource } from "./datasource";
+import { AdMutations } from "./graphql-resolvers/AdMutations";
+import { CategoriesQueries } from "./graphql-resolvers/CategoriesQueries";
 
 const port = 4000;
 
@@ -21,7 +23,7 @@ const port = 4000;
 async function startServerApollo() {
 
     const schema = await buildSchema({
-        resolvers: [AdResolver],
+        resolvers: [AdQueries, AdMutations, CategoriesQueries],
     });
     
     const server = new ApolloServer({

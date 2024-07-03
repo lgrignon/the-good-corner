@@ -16,7 +16,7 @@ export class Ad extends BaseEntity {
     title: string;
 
     @Column({ nullable: true })
-    @Field()
+    @Field({ nullable: true })
     description?: string;
 
     @Column()
@@ -24,15 +24,15 @@ export class Ad extends BaseEntity {
     owner: string;
 
     @Column({ nullable: true })
-    @Field(type => Int)
+    @Field(type => Int, { nullable: true })
     price?: number;
 
     @Column({ nullable: true })
-    @Field()
+    @Field({ nullable: true })
     picture?: string;
 
     @Column({ nullable: true })
-    @Field()
+    @Field({ nullable: true })
     location?: string;
 
     @Column({ nullable: true })
