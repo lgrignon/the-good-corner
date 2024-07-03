@@ -2,30 +2,17 @@ import { useEffect, useState } from "react";
 import { AdCard, AdCardProps } from "./AdCard";
 import axios from "axios";
 import { BACKEND_URL } from "@/constants";
-
-async function fetchAds(): Promise<AdCardProps[]> {
-    try {
-        const { data } = await axios.get<AdCardProps[]>(BACKEND_URL + '/ads');
-        return data.sort((adLeft: AdCardProps, adRight: AdCardProps) => adLeft.title < adRight.title ? -1 : 1);
-    } catch (e) {
-        console.error(e, 'cannot fetch ads - falling back to empty array');
-        return [];
-    }
-}
+import { useQuery } from "@apollo/client";
+import { GET_ALL_ADS_QUERY } from "@/graphql-queries/ads";
 
 export function RecentAds() {
 
     const [totalPrice, setTotalPrice] = useState<number>();
-    const [ads, setAds] = useState<AdCardProps[]>([]);
 
-    async function initAds() {
-        const ads: AdCardProps[] = await fetchAds();
-        setAds(ads);
-    }
+    const { data, loading, error } = useQuery(GET_ALL_ADS_QUERY);
 
     useEffect(() => {
         console.log('initialisation du totalPrice à 0');
-        initAds();
         setTotalPrice(0);
     }, []);
 
@@ -33,6 +20,19 @@ export function RecentAds() {
 
         setTotalPrice(totalPrice! + price);
     }
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+    
+    if (error) {
+        return <p>Error : {error.message}</p>;
+    }
+
+    console.log('démonstration du retour de apollo client suite à la requête GraphQL ' , data);
+
+    let ads: AdCardProps[] = [...data.getAllAds];
+    ads = ads.sort((adLeft: AdCardProps, adRight: AdCardProps) => adLeft.title < adRight.title ? -1 : 1);
 
     return (
         <>

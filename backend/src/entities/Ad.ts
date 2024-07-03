@@ -1,7 +1,7 @@
 import { BaseEntity, BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { Category } from "./Category";
 import { Tag } from "./Tag";
-import { Field, ID, Int, ObjectType } from "type-graphql";
+import { Field, Float, ID, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
