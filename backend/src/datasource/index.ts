@@ -3,14 +3,16 @@ import { Tag } from "../entities/Tag";
 import { Category } from "../entities/Category";
 import { Ad } from "../entities/Ad";
 
+const dbPass = process.env.THEGOODCORNER_DBPASS;
+console.log("init TypeORM DS with password: " + dbPass)
 export const dataSource = new DataSource({
     type: 'postgres',
     
     host: 'db',
     port: 5432,
     database: 'the_good_corner',
-    username: 'postgres',
-    password: 'example',
+    username: 'the_good_corner_user',
+    password: dbPass,
 
     entities: ['src/entities/*.ts'],
     synchronize: true,
