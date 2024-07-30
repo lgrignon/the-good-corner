@@ -24,7 +24,7 @@ export class AdQueries {
 
     @Query(type => [Ad])
     async getAllAds(): Promise<Ad[]> {
-        console.log("getAllAds Query called from graphql")
+        console.log("MODIFIED getAllAds Query called from graphql")
         const ads: Ad[] = await dataSource.manager.find(Ad);
         return ads;
     }
