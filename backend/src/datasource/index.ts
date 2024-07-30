@@ -4,8 +4,14 @@ import { Category } from "../entities/Category";
 import { Ad } from "../entities/Ad";
 
 export const dataSource = new DataSource({
-    type: 'sqlite',
-    database: './db/good_corner.sqlite',
+    type: 'postgres',
+    
+    host: 'localhost',
+    port: 5432,
+    database: 'the_good_corner',
+    username: 'postgres',
+    password: 'example',
+
     entities: ['src/entities/*.ts'],
     synchronize: true,
     logging: "all"
