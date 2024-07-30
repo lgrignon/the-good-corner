@@ -1,5 +1,11 @@
 services:
 
+  back:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - 4000:4000
+
   db:
     image: postgres:16
     restart: unless-stopped

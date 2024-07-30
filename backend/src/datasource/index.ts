@@ -6,7 +6,7 @@ import { Ad } from "../entities/Ad";
 export const dataSource = new DataSource({
     type: 'postgres',
     
-    host: 'localhost',
+    host: 'db',
     port: 5432,
     database: 'the_good_corner',
     username: 'postgres',
