@@ -21,6 +21,9 @@ services:
       POSTGRES_PASSWORD: example
     ports:
       - 5432:5432
+    volumes:
+      - /home/louis/2405_cda_js/workspace/the-good-corner-db-data:/var/lib/postgresql/data
+
 
   adminer:
     image: adminer
