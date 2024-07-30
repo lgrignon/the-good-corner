@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "@/constants";
+import { useGetAllCategoryQuery, usePublishAdMutation } from "@/generated/graphql-types";
 import { PUBLISH_AD_MUTATION } from "@/graphql-queries/ads";
 import { GET_ALL_CATEGORIES_QUERY } from "@/graphql-queries/categories";
 import { CreateAdData, adService } from "@/services/AdService";
@@ -8,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface AdCategory {
-    id: number;
+    id: string;
     name: string;
 }
 
@@ -20,24 +21,14 @@ export interface CreateAdFormData {
 
 export default function CreateAdPage() {
 
-    const { data: categoriesResult, loading: categoriesLoading, error: categoriesError } = useQuery(GET_ALL_CATEGORIES_QUERY);
+    const { data: categoriesResult, loading: categoriesLoading, error: categoriesError } = useGetAllCategoryQuery();
 
-    const [publishAd, { loading, data, error }] = useMutation(PUBLISH_AD_MUTATION);
+    const [publishAd, { loading, data, error }] = usePublishAdMutation();
 
     const { register, handleSubmit } = useForm<CreateAdFormData>();
 
     async function onFormSubmitted(formData: CreateAdFormData) {
         console.log('on form submitted', formData);
-
-        // const createData: CreateAdData = {
-        //     ...formData,
-        //     owner: 'Louis',
-        //     location: 'Montreuil',
-        //     picture: undefined,
-        //     category: {
-        //         name: 'Objets qui allument'
-        //     }
-        // };
 
         await publishAd({
             variables: {
@@ -56,6 +47,10 @@ export default function CreateAdPage() {
 
     if (categoriesError) {
         return <p>Error : {categoriesError.message}</p>;
+    }
+
+    if (categoriesResult == null) {
+        return <p>No data...</p>;
     }
 
     console.log("mutation data", loading, data, error);

@@ -10,6 +10,10 @@ export const GET_ALL_ADS_QUERY = gql`
         price
         picture
     }
+    getAllCategories {
+        id
+        name
+    }
     
   }
 `;

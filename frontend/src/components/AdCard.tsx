@@ -1,11 +1,11 @@
 import styles from './AdCard.module.css';
 
 export interface AdCardProps {
-    id: number;
+    id: string;
     title: string;
-    description?: string;
-    price: number;
-    picture?: string;
+    description?: string | null;
+    price?: number | null;
+    picture?: string | null;
 }
 
 export function AdCard({ id, description, title, price = 0, picture }: AdCardProps) {
