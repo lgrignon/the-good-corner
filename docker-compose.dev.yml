@@ -1,5 +1,13 @@
 services:
 
+  front:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/webapp
+
   back:
     build: ./backend
     restart: unless-stopped
