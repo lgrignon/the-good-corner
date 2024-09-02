@@ -42,8 +42,8 @@ async function startServerApollo() {
 
     await dataSource.initialize();
 
-    await cleanDB();
-    await initTestData();
+    // await cleanDB();
+    // await initTestData();
 
     const { url } = await startStandaloneServer(server, {
         listen: { port },
