@@ -16,7 +16,9 @@ services:
     volumes:
       - ./backend:/app
     environment:
+      THEGOODCORNER_DBUSER: ${DBUSER}
       THEGOODCORNER_DBPASS: ${DBPASS}
+      JWT_SECRET: ${JWT_SECRET}
 
   db:
     image: postgres:16

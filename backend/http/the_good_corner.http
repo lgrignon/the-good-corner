@@ -5,9 +5,37 @@ GET http://localhost:4000
 
 POST http://localhost:4000
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImxvdWlzLmdyaWdub25AZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3MjUyODc4MjF9.kBN9YXtkAP4N-5X6nknpLh2CY9FL4G5LxTb_aH1Oys8
 
 {
     "query": "query QueryAllAds { getAllAds { title createdAt category { name } tags { name } } }"
+}
+
+### Mutation create user on apollo graphql
+
+POST http://localhost:4000
+Content-Type: application/json
+
+{
+    "query": "mutation CreateUser($email: String!, $password: String!, $role: String!) { createUser(email: $email, password: $password, role: $role) { id email } }",
+    "variables": {
+        "email": "louis.grignon@gmail.com",
+        "password": "toto",
+        "role": "USER"
+    }
+}
+
+### Query login user on apollo graphql
+
+POST http://localhost:4000
+Content-Type: application/json
+
+{
+    "query": "query LoginUser($email: String!, $password: String!) { login(email: $email, password: $password) }",
+    "variables": {
+        "email": "louis.grignon@gmail.com",
+        "password": "toto"
+    }
 }
 
 ###

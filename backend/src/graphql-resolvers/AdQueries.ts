@@ -1,4 +1,4 @@
-import { FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { Authorized, FieldResolver, Query, Resolver, Root } from "type-graphql";
 import { Ad } from "../entities/Ad";
 import DataLoader from "dataloader";
 import { Tag } from "../entities/Tag";
@@ -22,6 +22,7 @@ export class AdQueries {
         return tagsDataLoader.loadMany(ad.tagIds);
     }
 
+    @Authorized()
     @Query(type => [Ad])
     async getAllAds(): Promise<Ad[]> {
         console.log("MODIFIED getAllAds Query called from graphql")
