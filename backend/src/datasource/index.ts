@@ -2,13 +2,15 @@ import { DataSource } from "typeorm";
 import { Tag } from "../entities/Tag";
 import { Category } from "../entities/Category";
 import { Ad } from "../entities/Ad";
+import { User } from "../entities/User";
+import argon2 from "argon2";
 
 const dbUser = process.env.THEGOODCORNER_DBUSER;
 const dbPass = process.env.THEGOODCORNER_DBPASS;
 console.log("init TypeORM DS with password: " + dbUser + ": " + dbPass)
 export const dataSource = new DataSource({
     type: 'postgres',
-    
+
     host: 'db',
     port: 5432,
     database: 'the_good_corner',
@@ -20,10 +22,16 @@ export const dataSource = new DataSource({
     logging: "all"
 });
 
+async function clear(entityClass: Function) {
+    const objects = await dataSource.manager.find(entityClass);
+    await dataSource.manager.delete(entityClass, objects);
+}
+
 export async function cleanDB() {
-    await dataSource.manager.clear(Ad);
-    await dataSource.manager.clear(Category);
-    await dataSource.manager.clear(Tag);
+    await clear(Ad);
+    await clear(Category);
+    await clear(Tag);
+    await clear(User);
 }
 
 async function createAndPersistAd(title: string, description: string | undefined, owner: string, price: number, pictureUrl: string | undefined, category: Category, ...tags: Tag[]) {
@@ -35,6 +43,11 @@ async function createAndPersistAd(title: string, description: string | undefined
 
 export async function initTestData() {
 
+    console.log('init users')
+    const admin = new User("louis.grignon@gmail.com", 'ADMIN', await argon2.hash('toto'))
+    await admin.save();
+
+    console.log('init ads')
     const tag = new Tag('Vieux matériel');
     const tag2 = new Tag('Bonne affaire');
     const tag3 = new Tag('0 carbone');

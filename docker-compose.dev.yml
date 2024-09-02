@@ -36,7 +36,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /home/louis/2405_cda_js/workspace/the-good-corner-db-data:/var/lib/postgresql/data
+      - /Users/louisgrignon/Documents/okolo/the-good-corner-db-data:/var/lib/postgresql/data
 
 
   adminer:

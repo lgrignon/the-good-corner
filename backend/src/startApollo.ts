@@ -12,7 +12,7 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { AdQueries } from "./graphql-resolvers/AdQueries";
 import { buildSchema } from "type-graphql";
-import { dataSource, initTestData } from "./datasource";
+import { cleanDB, dataSource, initTestData } from "./datasource";
 import { AdMutations } from "./graphql-resolvers/AdMutations";
 import { CategoriesQueries } from "./graphql-resolvers/CategoriesQueries";
 import { UserQueriesAndMutations } from "./graphql-resolvers/UsersQueriesAndMutations";
@@ -41,6 +41,9 @@ async function startServerApollo() {
     });
 
     await dataSource.initialize();
+
+    await cleanDB();
+    await initTestData();
 
     const { url } = await startStandaloneServer(server, {
         listen: { port },
