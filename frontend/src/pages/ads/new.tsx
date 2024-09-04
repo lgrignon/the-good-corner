@@ -1,11 +1,5 @@
-import { BACKEND_URL } from "@/constants";
 import { useGetAllCategoryQuery, usePublishAdMutation } from "@/generated/graphql-types";
-import { PUBLISH_AD_MUTATION } from "@/graphql-queries/ads";
-import { GET_ALL_CATEGORIES_QUERY } from "@/graphql-queries/categories";
-import { CreateAdData, adService } from "@/services/AdService";
-import { useMutation, useQuery } from "@apollo/client";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import { useForm } from "react-hook-form";
 
 interface AdCategory {
