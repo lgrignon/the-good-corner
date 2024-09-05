@@ -5,6 +5,7 @@ import Layout from "./layout";
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
 import { ContextSetter, setContext } from "@apollo/client/link/context"
 import { AUTH_TOKEN_LOCAL_STORAGE_KEY } from ".";
+import { AuthContextProvider } from "@/contexts/authContext";
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000'
@@ -31,9 +32,11 @@ const apolloClient = new ApolloClient({
 function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <AuthContextProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </AuthContextProvider>
     </ApolloProvider>
   );
 }
