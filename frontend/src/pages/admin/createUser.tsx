@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { CreateUserMutation, useCreateUserMutation } from "@/generated/graphql-types";
 import { ApolloError } from "@apollo/client";
+import { withAutorization } from "@/components/withAuthorization";
+import { AuthRole } from "@/contexts/authContext";
 
 interface CreateUserFormData {
   email: string;
@@ -10,7 +12,7 @@ interface CreateUserFormData {
 
 export const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'authToken';
 
-export default function CreateUserPage() {
+const CreateUserPage = () => {
 
   const [sendCreateUserMutation, { loading, error, data }] = useCreateUserMutation({
     onCompleted: (data: CreateUserMutation) => {
@@ -51,3 +53,5 @@ export default function CreateUserPage() {
     </>
   );
 }
+
+export default withAutorization(CreateUserPage, AuthRole.ADMIN);

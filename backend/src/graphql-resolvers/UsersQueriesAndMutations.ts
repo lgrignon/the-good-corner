@@ -47,7 +47,9 @@ export class UserQueriesAndMutations {
             throw new Error('invalid JWT secret');
         }
 
-        const token: string = jwt.sign({ email, role: user.role }, jwtSecret);
+        const token: string = jwt.sign({ email, role: user.role }, jwtSecret, {
+            expiresIn: '24h'
+        });
         return token;
     }
 

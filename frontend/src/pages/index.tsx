@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import { LoginUserQuery, useLoginUserLazyQuery } from "@/generated/graphql-types";
 import { ApolloError } from "@apollo/client";
 import { AUTH_TOKEN_LOCAL_STORAGE_KEY } from "./admin/createUser";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext, AuthContextType } from "@/contexts/authContext";
+import { useRouter } from "next/router";
 
 interface LoginFormData {
   email: string;
@@ -14,6 +15,8 @@ interface LoginFormData {
 export default function LoginPage() {
 
   const { email, creationTime, setToken } = useContext<AuthContextType>(AuthContext);
+
+  const router = useRouter();
 
   const [sendLoginQuery, { loading, error }] = useLoginUserLazyQuery({
     onCompleted: (data: LoginUserQuery) => {
@@ -32,14 +35,28 @@ export default function LoginPage() {
   const onLoginFormSubmitted = (formData: LoginFormData) => {
     console.log('form data', formData);
 
+    delete router.query.message;
+
     sendLoginQuery({
       variables: formData
     });
   };
 
+  if (email != null) {
+    router.push({
+      pathname: '/myAccount',
+      query: router.query
+    });
+  }
+
   return (
     <>
       <h2>Connexion</h2>
+
+      {router.query.message &&
+        <div style={{ color: 'orange', fontStyle: 'italic', fontSize: '1.5em' }}>
+          {router.query.message}
+        </div>}
 
       <form onSubmit={handleSubmit(onLoginFormSubmitted)}>
 
@@ -47,10 +64,8 @@ export default function LoginPage() {
         <input type="password" {...register('password', { required: true })} placeholder="Mot de passe" /> <br />
 
         <input type="submit" value="Se connecter" /> <br />
-        {loading && 'Loading...'}<br/>
-        {error && 'Une erreur est survenue, merci de réessayer...'}<br/>
-        {email && `L'utilisateur est bien connecté avec l'email: ${email}`} <br/>
-        {creationTime && `L'utilisateur s'est connecté à : ${creationTime.toISOString()}`}<br/>
+        {loading && 'Loading...'}<br />
+        {error && 'Une erreur est survenue, merci de réessayer...'}<br />
 
       </form>
     </>
