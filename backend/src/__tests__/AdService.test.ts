@@ -1,19 +1,35 @@
 import { Ad } from "../entities/Ad";
-import { AdService } from "../services/AdService";
 
+jest.mock('../services/EmailService'); 
+
+import { AdService } from "../services/AdService";
 import { faker } from '@faker-js/faker';
 
+//import { EmailService } from "../services/EmailService";
+// class TestEmailService extends EmailService {
+//     sendEmail(title: string, to: string): void {
+//         console.log("emails are disabled during unit tests");
+//     }
+// }
+
 describe("AdService", () => {
+    let adService: AdService;
+
+    beforeEach(() => {
+        adService = new AdService(/*new TestEmailService()*/);
+    });
+
+    describe("buy ad", () => {
+
+        it("buy ad saves ad buyer and sends email", () => {
+            const ad = new Ad(faker.vehicle.bicycle(), undefined, "ceo@google.fr", 20);
+            adService.buyAd(ad)
+        });
+
+    })
  
     describe("compute average ads price", () => {
 
-        let adService: AdService;
-
-        
-
-        beforeEach(() => {
-            adService = new AdService();
-        });
 
         it("returns 0 if ads is empty", () => {
             const average: number = adService.computeAdsAveragePrice([]);
