@@ -10,8 +10,6 @@ services:
       retries: 10
     ports:
       - 4000:4000
-    volumes:
-      - $PWD/backend:/app
     environment:
       THEGOODCORNER_DBUSER: postgres
       THEGOODCORNER_DBPASS: example
@@ -23,8 +21,6 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile.deploy
-    volumes:
-      - ./frontend:/webapp
     healthcheck:
       test: "curl --fail --request GET --url 'http://localhost:3000' || exit 1"
       interval: 5s
