@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const url = 'http://localhost:3000'
+const url = 'http://frontend:3000'
 
 test('has title', async ({ page }) => {
   await page.goto(url);
