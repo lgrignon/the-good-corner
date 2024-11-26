@@ -9,7 +9,7 @@ services:
     ports:
       - 4000:4000
     volumes:
-      - /home/runner/work/the-good-corner/the-good-corner/backend:/app
+      - $PWD/backend:/app
     environment:
       THEGOODCORNER_DBUSER: postgres
       THEGOODCORNER_DBPASS: example
