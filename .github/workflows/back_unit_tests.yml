@@ -1,6 +1,8 @@
 name: back_unit_tests
 
-on: push
+on: 
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   back-unit-tests:
