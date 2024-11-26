@@ -21,7 +21,7 @@ services:
       timeout: 5s
       retries: 10
     depends_on:
-      backend:
+      back:
         condition: service_healthy
   db:
     image: postgres
@@ -40,5 +40,5 @@ services:
       - ./e2e/playwright-report:/app/playwright-report
       - ./e2e/test-results:/app/test-results
     depends_on:
-      frontend:
+      front:
         condition: service_healthy
