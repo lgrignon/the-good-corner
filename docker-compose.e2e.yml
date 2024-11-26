@@ -1,17 +1,20 @@
 services:
-  backend:
+  back:
     build: ./backend
     healthcheck:
       test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:4000'' --data ''{"query":"query { __typename }"}'' || exit 1'
       interval: 5s
       timeout: 5s
       retries: 10
+    environment:
+      THEGOODCORNER_DBUSER: postgres
+      THEGOODCORNER_DBPASS: example
+      JWT_SECRET: superSecret_secured____
     depends_on:
       db:
         condition: service_healthy
-  frontend:
+  front:
     build: ./frontend
-    env_file: .env.test
     healthcheck:
       test: "curl --fail --request GET --url 'http://localhost:3000' || exit 1"
       interval: 5s
