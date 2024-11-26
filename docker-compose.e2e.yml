@@ -1,6 +1,8 @@
 services:
   back:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.deploy
     healthcheck:
       test: 'curl --fail --request POST --header ''content-type: application/json'' --url ''http://localhost:4000'' --data ''{"query":"query { __typename }"}'' || exit 1'
       interval: 5s
@@ -18,7 +20,9 @@ services:
       db:
         condition: service_healthy
   front:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.deploy
     volumes:
       - ./frontend:/webapp
     healthcheck:
