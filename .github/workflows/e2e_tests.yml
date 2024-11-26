@@ -14,3 +14,10 @@ jobs:
         run: ls -l
       - name: Run interface test
         run: docker compose -f docker-compose.e2e.yml up --build --exit-code-from e2e
+      - name: Debugs logs 3
+        run: ls -l ./e2e/screenshots
+      - name: Upload screenshot
+        uses: actions/upload-artifact@latest
+        with:
+            name: e2e-snapshots
+            path: ./e2e/screenshots

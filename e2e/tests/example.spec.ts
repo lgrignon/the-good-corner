@@ -16,6 +16,8 @@ test('login test', async ({ page }) => {
   await page.getByPlaceholder('Mot de passe').click();
   await page.getByPlaceholder('Mot de passe').fill('toto');
   await page.getByRole('button', { name: 'Se connecter' }).click();
+
+  await page.screenshot({ path: '/app/screenshots/test.png' });
   
   await expect(page.getByRole('note')).toContainText('Votre email: louis.');
 });

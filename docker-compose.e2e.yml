@@ -44,6 +44,7 @@ services:
     volumes:
       - ./e2e/playwright-report:/app/playwright-report
       - ./e2e/test-results:/app/test-results
+      - ./e2e/screenshots:/app/screenshots
     depends_on:
       front:
         condition: service_healthy
