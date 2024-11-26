@@ -32,8 +32,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 20
-  imagesupload:
-    build: ./imagesupload
   e2e:
     build: ./e2e
     volumes:
