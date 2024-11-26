@@ -1,0 +1,12 @@
+name: back_unit_tests
+
+on: push
+
+jobs:
+  back-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+      - name: Run tests
+        run: cd backend && npm ci && npm run test
