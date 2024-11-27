@@ -4,23 +4,22 @@ import { dataSource } from "../datasource";
 import { Category } from "../entities/Category";
 import { CategoriesQueries } from "../graphql-resolvers/CategoriesQueries";
 
-describe("Ad graphql queries and mutations", () => {
+describe("Categories graphql queries", () => {
     let catQueries: CategoriesQueries;
 
     beforeEach(() => {
         catQueries = new CategoriesQueries();
     });
 
-    describe("2 query all ads", () => {
+    describe("query all categories", () => {
 
-        it("2 returns ads from TypeORM", async () => {
-            const c3 = new Category("c3");
+        it("returns categories", async () => {
             mockTypeOrm().onMock(Category)
-            .toReturn([new Category("c1"), new Category("v2")], 'find')
-            .toReturn(c3, 'save');
+            .toReturn([new Category("c1"), new Category("c2")], 'find');
 
-            const rr = await catQueries.getAllCategories();
-            console.log(rr);
+            const categories = await catQueries.getAllCategories();
+            console.log(categories);
+            expect(categories.length).toBe(2);
         });
 
     })
