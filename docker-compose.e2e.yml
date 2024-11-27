@@ -9,6 +9,9 @@ services:
       - 3000:3000
     environment:
       CI: true
+    depends_on:
+      back:
+        condition: service_healthy
 
   back:
     build: 
@@ -17,11 +20,14 @@ services:
     restart: unless-stopped
     ports:
       - 4000:4000
+    healthcheck:
+      test: 'curl --request POST --header ''Content-Type: application/json'' --url ''http://localhost:4000'' --data ''{"query": "query { __typename }"}'' '
     environment:
       CI: true
       THEGOODCORNER_DBUSER: postgres
       THEGOODCORNER_DBPASS: e2etestdb
       JWT_SECRET: e2e_secret_jwt
+    depends_on: db
 
   db:
     image: postgres:16
@@ -48,3 +54,7 @@ services:
     volumes:
       - ./e2e/screenshots:/app/screenshots
       - ./e2e/test-results:/app/test-results
+    depends_on:
+      front:
+        condition: service_healthy
+        
