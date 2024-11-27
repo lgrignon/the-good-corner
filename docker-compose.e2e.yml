@@ -41,6 +41,8 @@ services:
       retries: 20
   e2e:
     build: ./e2e
+    environment:
+      CI: true
     volumes:
       - ./e2e/playwright-report:/app/playwright-report
       - ./e2e/test-results:/app/test-results
