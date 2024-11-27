@@ -15,6 +15,10 @@ test('has title', async ({ page }) => {
 });
 
 test('can login and access ads', async ({ page }) => {
+  page.on('console', message => {
+    console.log('browser log: ' + message)
+  });
+
   await page.goto(FRONT_URL);
   await page.getByPlaceholder('Email').click();
   await page.getByPlaceholder('Email').fill('louis.grignon@gmail.com');
@@ -22,7 +26,9 @@ test('can login and access ads', async ({ page }) => {
   await page.getByPlaceholder('Mot de passe').fill('toto');
   await page.getByRole('button', { name: 'Se connecter' }).click();
 
-  await page.screenshot({ path: '/app/screenshots/after-login.png' })
+  console.log("will take screenshot")
+  await page.screenshot({ path: './screenshots/after-login.png' })
+  console.log("screenshot taken")
 
   await expect(page.getByLabel('welcome message')).toContainText('Votre email: louis.');
 

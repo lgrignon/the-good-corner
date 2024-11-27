@@ -10,3 +10,13 @@ jobs:
     - uses: actions/checkout@v4
     - name: Run tests
       run: docker compose -f docker-compose.e2e.yml up --build --force-recreate --exit-code-from e2e
+    - name: Debug current dir
+      run: pwd
+    - name: Debug screenshots content
+      run: ls -l e2e/screenshots
+    - name: Publish screenshots
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with: 
+        name: e2e_screenshots
+        path: e2e/screenshots

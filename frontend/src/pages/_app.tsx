@@ -12,6 +12,8 @@ const httpLink = createHttpLink({
   uri: BACKEND_URL
 });
 
+console.log("will use apollo back url : " + BACKEND_URL);
+
 const authHeaderFunction: ContextSetter = (request, { headers }) => {
 
   const token: string | null = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
