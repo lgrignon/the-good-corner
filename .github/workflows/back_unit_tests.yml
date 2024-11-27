@@ -12,3 +12,6 @@ jobs:
         run: cd backend && npm i
       - name: Move in back and Typescript transpile
         run: cd backend && npx tsc
+      - name: Run back unit tests
+        run: npm test
+        working-directory: ./backend
