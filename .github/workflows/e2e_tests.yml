@@ -17,7 +17,7 @@ jobs:
       - name: Debugs logs 3
         run: ls -l ./e2e/screenshots
       - name: Upload screenshot
-        uses: actions/upload-artifact@latest
+        uses: actions/upload-artifact@v4
         with:
             name: e2e-snapshots
             path: ./e2e/screenshots
