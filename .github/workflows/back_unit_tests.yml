@@ -1,0 +1,12 @@
+name: back_unit_tests
+
+on: push
+
+jobs:
+  back_unit_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout TGC code
+        uses: actions/checkout@v4
+      - name: Typescript transpilation
+        run: npx tsc
