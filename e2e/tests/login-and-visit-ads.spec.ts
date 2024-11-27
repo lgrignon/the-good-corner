@@ -2,10 +2,12 @@ import { test, expect } from '@playwright/test';
 
 let FRONT_URL;
 if (process.env.CI) {
-  FRONT_URL = 'http://front:3000/';
+  FRONT_URL = 'http://front:3000/?CI=true';
 } else {
   FRONT_URL = 'http://localhost:3000/';
 }
+
+console.log("we will use front URL : " + FRONT_URL)
 
 test('has title', async ({ page }) => {
   await page.goto(FRONT_URL);
@@ -16,7 +18,7 @@ test('has title', async ({ page }) => {
 
 test('can login and access ads', async ({ page }) => {
   page.on('console', message => {
-    console.log('browser log: ' + message)
+    console.log('browser log: ', message)
   });
 
   await page.goto(FRONT_URL);
@@ -34,5 +36,5 @@ test('can login and access ads', async ({ page }) => {
 
   await page.getByRole('link', { name: 'Ameublement' }).click();
 
-  await expect(page.getByLabel('ad title').nth(1)).toContainText('Bougie');
+  await expect(page.getByLabel('ad title').nth(0)).toContainText('Armoire normande');
 });

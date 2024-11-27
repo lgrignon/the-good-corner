@@ -38,7 +38,7 @@ export function RecentAds() {
     return (
         <>
             <span>Le prix total est : {totalPrice}</span>
-            <section className="recent-ads">
+            <section className="recent-ads" arial-label="recent ads">
 
                 {ads.map((adProps, index: number) => (
                     <div key={index}>
