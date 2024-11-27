@@ -27,7 +27,7 @@ services:
       THEGOODCORNER_DBUSER: postgres
       THEGOODCORNER_DBPASS: e2etestdb
       JWT_SECRET: e2e_secret_jwt
-    depends_on: db
+    depends_on: [db]
 
   db:
     image: postgres:16
