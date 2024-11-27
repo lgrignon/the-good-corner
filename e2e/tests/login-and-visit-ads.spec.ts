@@ -22,6 +22,8 @@ test('can login and access ads', async ({ page }) => {
   await page.getByPlaceholder('Mot de passe').fill('toto');
   await page.getByRole('button', { name: 'Se connecter' }).click();
 
+  await page.screenshot({ path: '/app/screenshots/after-login.png' })
+
   await expect(page.getByLabel('welcome message')).toContainText('Votre email: louis.');
 
   await page.getByRole('link', { name: 'Ameublement' }).click();
