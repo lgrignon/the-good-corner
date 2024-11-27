@@ -8,5 +8,5 @@ jobs:
     steps:
       - name: Checkout TGC code
         uses: actions/checkout@v4
-      - name: Typescript transpilation
-        run: npx tsc
+      - name: Move in back and Typescript transpile
+        run: cd backend && npx tsc
