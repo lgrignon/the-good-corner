@@ -11,6 +11,7 @@ services:
     ports:
       - 4000:4000
     environment:
+      CI: true
       THEGOODCORNER_DBUSER: postgres
       THEGOODCORNER_DBPASS: example
       JWT_SECRET: superSecret_secured____
