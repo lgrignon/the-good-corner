@@ -36,6 +36,7 @@ services:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
       POSTGRES_PASSWORD: e2etestdb
+      POSTGRES_DB: the_good_corner
     ports:
       - 5432:5432
 
