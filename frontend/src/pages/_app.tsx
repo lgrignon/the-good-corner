@@ -6,9 +6,10 @@ import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@ap
 import { ContextSetter, setContext } from "@apollo/client/link/context"
 import { AUTH_TOKEN_LOCAL_STORAGE_KEY } from ".";
 import { AuthContextProvider } from "@/contexts/authContext";
+import { BACKEND_URL } from "@/constants";
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
+  uri: BACKEND_URL
 });
 
 const authHeaderFunction: ContextSetter = (request, { headers }) => {

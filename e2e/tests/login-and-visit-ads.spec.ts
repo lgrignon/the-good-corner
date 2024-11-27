@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-const FRONT_URL = 'http://localhost:3000/';
+let FRONT_URL;
+if (process.env.CI) {
+  FRONT_URL = 'http://front:3000/';
+} else {
+  FRONT_URL = 'http://localhost:3000/';
+}
 
 test('has title', async ({ page }) => {
   await page.goto(FRONT_URL);
