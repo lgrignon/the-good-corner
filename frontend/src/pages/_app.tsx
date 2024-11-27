@@ -8,7 +8,7 @@ import { AUTH_TOKEN_LOCAL_STORAGE_KEY } from ".";
 import { AuthContextProvider } from "@/contexts/authContext";
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
+  uri: 'http://back:4000'
 });
 
 const authHeaderFunction: ContextSetter = (request, { headers }) => {
