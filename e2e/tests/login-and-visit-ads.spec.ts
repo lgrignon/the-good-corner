@@ -39,5 +39,5 @@ test('can login and access ads', async ({ page }) => {
   console.log("will take screenshot 2")
   await page.screenshot({ path: './screenshots/can-login-and-access-ads_beforeCheckAd.png' })
   console.log("screenshot taken 2")
-  await expect(page.getByLabel('ad title').nth(0)).toContainText('Armoire normande', { timeout: 15_000 });
+  await expect(page.getByLabel('ad title').nth(0)).toContainText('Armoire normande', { timeout: 10_000 });
 });

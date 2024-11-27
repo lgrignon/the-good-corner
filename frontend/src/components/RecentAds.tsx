@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { AdCard, AdCardProps } from "./AdCard";
-import { GetAllAdsQuery, useGetAllAdsQuery } from "@/generated/graphql-types";
+import { GetAllAdsQuery, useGetAllAdsLazyQuery, useGetAllAdsQuery } from "@/generated/graphql-types";
 
 export function RecentAds() {
 
     const [totalPrice, setTotalPrice] = useState<number>();
 
-    const { data, loading, error } = useGetAllAdsQuery();
+    const [loadAds, { data, loading, error }] = useGetAllAdsLazyQuery();
+
 
     useEffect(() => {
         console.log('initialisation du totalPrice à 0');
         setTotalPrice(0);
+        console.log('load ads');
+        loadAds().catch(e => console.error(e));
     }, []);
 
     function addPrice(price: number): void {
@@ -21,12 +24,12 @@ export function RecentAds() {
     if (error) {
         return <p>Error : {error.message}</p>;
     }
-    
-    if (loading) {
+
+    if (data == null || loading) {
         return <p>Loading...</p>;
     }
     const result: GetAllAdsQuery = data!;
-    console.log('démonstration du retour de apollo client suite à la requête GraphQL ' , data);
+    console.log('démonstration du retour de apollo client suite à la requête GraphQL ', data);
     let ads: AdCardProps[] = [...result.getAllAds];
     ads = ads.sort((adLeft: AdCardProps, adRight: AdCardProps) => adLeft.title < adRight.title ? -1 : 1);
 
