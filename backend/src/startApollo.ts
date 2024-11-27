@@ -43,7 +43,6 @@ async function startServerApollo() {
     await dataSource.initialize();
 
     if (process.env.CI) {
-        await cleanDB();
         await initTestData();
     }
     // await initTestData();
