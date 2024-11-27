@@ -14,7 +14,7 @@ export function AdCard({ id, description, title, price = 0, picture }: AdCardPro
             <img className={styles["ad-card-image"]} src={picture ?? '/images/file-question.svg'} />
             <div className={styles["ad-card-text"]} >
                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                    <div className={styles["ad-card-title"]}>{title}</div>
+                    <div className={styles["ad-card-title"]} aria-label="ad title">{title}</div>
                     {description && <div>{description.toUpperCase()}</div>}
                 </div>
 

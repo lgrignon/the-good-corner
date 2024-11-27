@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <h2>Connexion</h2>
+      <h2 aria-label="login page title">Connexion</h2>
 
       {router.query.message &&
         <div style={{ color: 'orange', fontStyle: 'italic', fontSize: '1.5em' }}>

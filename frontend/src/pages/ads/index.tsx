@@ -1,6 +1,7 @@
 import { RecentAds } from "@/components/RecentAds";
+import { withAutorization } from "@/components/withAuthorization";
 
-export default function AdsHome() {
+const AdsHome = () => {
   return (
     <>
       <h2>Annonces récentes</h2>
@@ -8,3 +9,5 @@ export default function AdsHome() {
     </>
   );
 }
+
+export default withAutorization(AdsHome);

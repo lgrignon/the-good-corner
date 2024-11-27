@@ -1,0 +1,49 @@
+services:
+
+  front:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.deploy
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      CI: true
+
+  back:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.deploy
+    restart: unless-stopped
+    ports:
+      - 4000:4000
+    environment:
+      CI: true
+      THEGOODCORNER_DBUSER: postgres
+      THEGOODCORNER_DBPASS: e2etestdb
+      JWT_SECRET: e2e_secret_jwt
+
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: e2etestdb
+    ports:
+      - 5432:5432
+
+  e2e:
+    build:
+      context: e2e
+    environment:
+      CI: true
+    volumes:
+      - ./e2e/screenshots:/app/screenshots
+      - ./e2e/test-results:/app/test-results

@@ -22,7 +22,7 @@ export class AdQueries {
         return tagsDataLoader.loadMany(ad.tagIds);
     }
 
-    @Authorized()
+    //@Authorized()
     @Query(type => [Ad])
     async getAllAds(): Promise<Ad[]> {
 

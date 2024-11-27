@@ -27,7 +27,7 @@ const MyAccountPage = () => {
           {router.query.message}
         </div>}
 
-      {email && `Votre email: ${email}`} <br />
+      {email && <span aria-label="welcome message">Votre email: {email}</span>} <br />
       {creationTime && `Connecté depuis: ${creationTime.toISOString()}`}<br />
       {expirationTime && `Connecté jusqu'à: ${expirationTime.toISOString()}`}<br />
 

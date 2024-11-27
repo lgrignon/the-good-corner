@@ -29,7 +29,7 @@ export function Header() {
                 <span className="desktop-long-label">Publier une annonce</span></a>
         </div>
         <nav className="categories-navigation">
-            <a href="" className="category-navigation-link">Ameublement</a> •
+            <a href="/ads" className="category-navigation-link">Ameublement</a> •
             <a href="" className="category-navigation-link">Électroménager</a> •
             <a href="" className="category-navigation-link">Photographie</a> •
             <a href="" className="category-navigation-link">Informatique</a> •

@@ -42,9 +42,10 @@ async function startServerApollo() {
 
     await dataSource.initialize();
 
-    // await cleanDB();
-    // await initTestData();
-
+    if (process.env.CI) {
+      await initTestData();
+    }
+    
     const { url } = await startStandaloneServer(server, {
         listen: { port },
         context: async ({req}) => {
