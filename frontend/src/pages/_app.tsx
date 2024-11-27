@@ -6,33 +6,47 @@ import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@ap
 import { ContextSetter, setContext } from "@apollo/client/link/context"
 import { AUTH_TOKEN_LOCAL_STORAGE_KEY } from ".";
 import { AuthContextProvider } from "@/contexts/authContext";
-import { BACKEND_URL } from "@/constants";
-
-const httpLink = createHttpLink({
-  uri: BACKEND_URL
-});
-
-console.log("will use apollo back url : " + BACKEND_URL);
-
-const authHeaderFunction: ContextSetter = (request, { headers }) => {
-
-  const token: string | null = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
-
-  return {
-    headers: {
-      ...headers,
-      Authorization: token ? 'Bearer ' + token : ''
-    }
-  };
-};
-const authHeaderLink = setContext(authHeaderFunction);
+import { useEffect } from "react";
 
 const apolloClient = new ApolloClient({
-  link: authHeaderLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 function App({ Component, pageProps }: AppProps) {
+
+  useEffect(() => {
+    const CIFlag = document.cookie.includes('CI=true') || new URL(document.location.href).searchParams.get('CI')
+    let BACKEND_URL;
+    if (CIFlag) {
+      BACKEND_URL = 'http://back:4000/';
+    } else {
+      BACKEND_URL = 'http://localhost:4000/';
+    }
+    document.cookie = `CI=${CIFlag}; `
+
+    console.log("will use apollo back url : " + BACKEND_URL);
+
+    const authHeaderFunction: ContextSetter = (request, { headers }) => {
+
+      const token: string | null = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
+
+      return {
+        headers: {
+          ...headers,
+          Authorization: token ? 'Bearer ' + token : ''
+        }
+      };
+    };
+
+
+    const httpLink = createHttpLink({
+      uri: BACKEND_URL
+    });
+
+    const authHeaderLink = setContext(authHeaderFunction);
+    apolloClient.setLink(authHeaderLink.concat(httpLink))
+  });
+
   return (
     <ApolloProvider client={apolloClient}>
       <AuthContextProvider>

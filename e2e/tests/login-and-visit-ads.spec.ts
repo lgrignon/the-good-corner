@@ -29,12 +29,15 @@ test('can login and access ads', async ({ page }) => {
   await page.getByRole('button', { name: 'Se connecter' }).click();
 
   console.log("will take screenshot")
-  await page.screenshot({ path: './screenshots/after-login.png' })
+  await page.screenshot({ path: './screenshots/can-login-and-access-ads_afterLogin.png' })
   console.log("screenshot taken")
 
   await expect(page.getByLabel('welcome message')).toContainText('Votre email: louis.');
 
   await page.getByRole('link', { name: 'Ameublement' }).click();
 
-  await expect(page.getByLabel('ad title').nth(0)).toContainText('Armoire normande');
+  console.log("will take screenshot 2")
+  await page.screenshot({ path: './screenshots/can-login-and-access-ads_beforeCheckAd.png' })
+  console.log("screenshot taken 2")
+  await expect(page.getByLabel('ad title').nth(0)).toContainText('Armoire normande', { timeout: 15_000 });
 });

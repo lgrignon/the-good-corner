@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 import { AdCard, AdCardProps } from "./AdCard";
-import axios from "axios";
-import { BACKEND_URL } from "@/constants";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_ADS_QUERY } from "@/graphql-queries/ads";
 import { GetAllAdsQuery, useGetAllAdsQuery } from "@/generated/graphql-types";
 
 export function RecentAds() {
@@ -22,14 +18,13 @@ export function RecentAds() {
         setTotalPrice(totalPrice! + price);
     }
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-    
     if (error) {
         return <p>Error : {error.message}</p>;
     }
-
+    
+    if (loading) {
+        return <p>Loading...</p>;
+    }
     const result: GetAllAdsQuery = data!;
     console.log('démonstration du retour de apollo client suite à la requête GraphQL ' , data);
     let ads: AdCardProps[] = [...result.getAllAds];
